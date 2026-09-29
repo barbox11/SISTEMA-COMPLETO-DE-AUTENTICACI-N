@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
+import logo from '../logo.png';
 import {
   cambiarPassword as cambiarPasswordApi,
   solicitarRecuperacion as solicitarRecuperacionApi,
@@ -10,20 +11,14 @@ import {
 } from '../services/authService.js';
 import { actualizarPerfil as actualizarPerfilApi } from '../services/userService.js';
 
-const logoSvg = (
-  <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M60 15C45 15 32 28 32 45C32 62 45 75 60 75C75 75 88 62 88 45C88 28 75 15 60 15Z" fill="white"/>
-    <path d="M60 30C50 30 42 38 42 50C42 62 50 70 60 70C70 70 78 62 78 50C78 38 70 30 60 30Z" fill="#0a0e1a"/>
-    <circle cx="60" cy="50" r="8" fill="white"/>
-  </svg>
-);
+const logoImg = <img src={logo} alt="Logo" width={120} height={120} />;
 
 const layoutSplit = { display: 'flex', minHeight: '100vh', fontFamily: 'system-ui, -apple-system, sans-serif' };
 const panelIzq = { flex: 1, background: '#0a0e1a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 40, color: 'white' };
 const panelDer = { flex: 1, background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 };
 const caja = { width: '100%', maxWidth: 380 };
 const input = { width: '100%', padding: '12px 14px', margin: '6px 0', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 14, boxSizing: 'border-box' };
-const boton = { width: '100%', padding: 12, borderRadius: 6, border: 0, background: '#0a0e1a', color: '#fff', fontWeight: 600, cursor: 'pointer', fontSize: 14, marginTop: 12 };
+const boton = { width: 'auto', padding: '10px 24px', borderRadius: 6, border: 0, background: '#0a0e1a', color: '#fff', fontWeight: 600, cursor: 'pointer', fontSize: 14, marginTop: 12 };
 const link = { color: '#2563eb', textDecoration: 'none', fontSize: 13 };
 const titulo = { fontSize: 20, fontWeight: 700, marginBottom: 4, color: '#111827' };
 const subtitulo = { fontSize: 13, color: '#6b7280', marginBottom: 20 };
@@ -93,22 +88,22 @@ export function PaginaLogin() {
   return (
     <div style={layoutSplit}>
       <div style={panelIzq}>
-        {logoSvg}
+        {logoImg}
         <p style={tagline}>Tus procesos más eficientes, seguros y sin fricciones.</p>
-        <p style={legal}>Ser un propietario o socio nunca fue tan fácil. Descubre cómo nuestros servicios pueden ayudarte a alcanzar tus metas.</p>
+        <p style={{ ...legal, color: '#ffffff' }}>Ser un propietario o socio nunca fue tan fácil. Descubre cómo nuestros servicios pueden ayudarte a alcanzar tus metas.</p>
       </div>
       <div style={panelDer}>
         <div style={caja}>
-          <h1 style={titulo}>Inicia sesión en tu cuenta</h1>
+          <h1 style={titulo}>Inicia sesión en tu cuenta de AdamoServices</h1>
           <p style={subtitulo}>Ingresa tus credenciales a continuación para continuar:</p>
           <form onSubmit={enviar}>
             <input style={input} type="email" placeholder="Correo electrónico" value={correo} onChange={(e) => setCorreo(e.target.value)} required />
             <input style={input} type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
             {error ? <p style={{ color: '#dc2626', fontSize: 13 }}>{error}</p> : null}
+            <p style={{ margin: '4px 0' }}><Link style={link} to="/recuperar-password">¿Olvidaste tu contraseña? Haz click aquí</Link></p>
             <button style={boton} disabled={cargando}>{cargando ? 'Ingresando…' : 'Iniciar sesión'}</button>
           </form>
           <p style={{ marginTop: 16 }}><Link style={link} to="/registro">Crear cuenta</Link></p>
-          <p><Link style={link} to="/recuperar-password">¿Olvidaste tu contraseña? Haz click aquí</Link></p>
         </div>
       </div>
     </div>
