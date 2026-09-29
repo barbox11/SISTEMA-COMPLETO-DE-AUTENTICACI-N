@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{baseUrl}}/auth/forgot-password"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "correo": "{{correo}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const json = pm.response.json();
+      if (json.tokenDesarrollo) { pm.collectionVariables.set('resetToken', json.tokenDesarrollo); }
+    language: text/javascript
+order: 4000

@@ -8,6 +8,7 @@ import {
   PaginaRecuperar,
   PaginaRestablecer,
   PaginaPerfil,
+  PaginaAdmin,
 } from './pages/paginas.jsx';
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/restablecer-password" element={<PaginaRestablecer />} />
           <Route path="/cambiar-password" element={<RutaCambioObligatorio><PaginaCambioPassword /></RutaCambioObligatorio>} />
           <Route path="/perfil" element={<RutaProtegida><PaginaPerfil /></RutaProtegida>} />
+          <Route path="/admin" element={<RutaProtegida><PaginaAdmin /></RutaProtegida>} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>

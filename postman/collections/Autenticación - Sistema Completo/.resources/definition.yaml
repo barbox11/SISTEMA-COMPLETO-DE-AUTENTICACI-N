@@ -1,0 +1,8 @@
+$kind: collection
+description: Colección para probar registro, login, cambio obligatorio, recuperación, reset, perfil y logout. Importa y configura la variable baseUrl.
+variables:
+  baseUrl: http://localhost:3000/api
+  token: ""
+  correo: juan@example.com
+  passwordTemporal: ""
+  resetToken: ""

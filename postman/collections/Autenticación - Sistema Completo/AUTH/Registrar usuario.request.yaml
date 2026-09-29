@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "nombre": "Juan",
+      "apellido": "Pérez",
+      "correo": "{{correo}}",
+      "rol": "usuario"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const json = pm.response.json();
+      if (json.passwordTemporal) { pm.collectionVariables.set('passwordTemporal', json.passwordTemporal); }
+    language: text/javascript
+order: 1000

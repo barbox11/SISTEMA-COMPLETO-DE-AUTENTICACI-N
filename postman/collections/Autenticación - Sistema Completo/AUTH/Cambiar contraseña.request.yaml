@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/auth/change-password"
+method: PATCH
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "passwordActual": "{{passwordTemporal}}",
+      "nuevaPassword": "NuevaPassword123!",
+      "confirmarPassword": "NuevaPassword123!"
+    }
+order: 3000

@@ -39,7 +39,9 @@ const legal = { marginTop: 16, fontSize: 10, color: '#ffffff', textAlign: 'cente
 export function PaginaRegistro() {
   const navegar = useNavigate();
   const esMovil = useMediaQuery('(max-width: 768px)');
-  const [form, setForm] = useState({ nombre: '', apellido: '', correo: '' });
+  const [form, setForm] = useState({ nombre: '', apellido: '', correo: '', password: '', confirmarPassword: '' });
+  const [verPassword, setVerPassword] = useState(false);
+  const [verConfirmar, setVerConfirmar] = useState(false);
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
   const [cargando, setCargando] = useState(false);
@@ -48,6 +50,10 @@ export function PaginaRegistro() {
     e.preventDefault();
     setError('');
     setMensaje('');
+    if (form.password !== form.confirmarPassword) {
+      setError('Las contraseñas no coinciden.');
+      return;
+    }
     setCargando(true);
     try {
       const res = await registrarApi(form.nombre.trim(), form.apellido.trim(), form.correo.trim());
@@ -74,6 +80,26 @@ export function PaginaRegistro() {
             <input style={input} placeholder="Nombre" value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} required />
             <input style={input} placeholder="Apellido" value={form.apellido} onChange={(e) => setForm({ ...form, apellido: e.target.value })} required />
             <input style={input} type="email" placeholder="Correo electrónico" value={form.correo} onChange={(e) => setForm({ ...form, correo: e.target.value })} required />
+            <div style={{ position: 'relative' }}>
+              <input style={{ ...input, paddingRight: 40 }} type={verPassword ? 'text' : 'password'} placeholder="Contraseña" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
+              <button type="button" onClick={() => setVerPassword(!verPassword)} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#6b7280' }}>
+                {verPassword ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                )}
+              </button>
+            </div>
+            <div style={{ position: 'relative' }}>
+              <input style={{ ...input, paddingRight: 40 }} type={verConfirmar ? 'text' : 'password'} placeholder="Confirmar contraseña" value={form.confirmarPassword} onChange={(e) => setForm({ ...form, confirmarPassword: e.target.value })} required />
+              <button type="button" onClick={() => setVerConfirmar(!verConfirmar)} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#6b7280' }}>
+                {verConfirmar ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                )}
+              </button>
+            </div>
             {error ? <p style={{ color: '#dc2626', fontSize: 13 }}>{error}</p> : null}
             {mensaje ? <p style={{ color: '#059669', fontSize: 13 }}>{mensaje}</p> : null}
             <button style={boton} disabled={cargando}>{cargando ? 'Registrando…' : 'Crear cuenta'}</button>
@@ -187,6 +213,10 @@ export function PaginaCambioPassword() {
 export function PaginaRecuperar() {
   const esMovil = useMediaQuery('(max-width: 768px)');
   const [correo, setCorreo] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmarPassword, setConfirmarPassword] = useState('');
+  const [verPassword, setVerPassword] = useState(false);
+  const [verConfirmar, setVerConfirmar] = useState(false);
   const [mensaje, setMensaje] = useState('');
   const [cargando, setCargando] = useState(false);
 
@@ -216,6 +246,26 @@ export function PaginaRecuperar() {
           <p style={subtitulo}>Ingresa tu correo para recibir instrucciones:</p>
           <form onSubmit={enviar}>
             <input style={input} type="email" placeholder="Correo electrónico" value={correo} onChange={(e) => setCorreo(e.target.value)} required />
+            <div style={{ position: 'relative' }}>
+              <input style={{ ...input, paddingRight: 40 }} type={verPassword ? 'text' : 'password'} placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <button type="button" onClick={() => setVerPassword(!verPassword)} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#6b7280' }}>
+                {verPassword ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                )}
+              </button>
+            </div>
+            <div style={{ position: 'relative' }}>
+              <input style={{ ...input, paddingRight: 40 }} type={verConfirmar ? 'text' : 'password'} placeholder="Confirmar contraseña" value={confirmarPassword} onChange={(e) => setConfirmarPassword(e.target.value)} required />
+              <button type="button" onClick={() => setVerConfirmar(!verConfirmar)} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#6b7280' }}>
+                {verConfirmar ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                )}
+              </button>
+            </div>
             {mensaje ? <p style={{ color: '#059669', fontSize: 13 }}>{mensaje}</p> : null}
             <button style={boton} disabled={cargando}>{cargando ? 'Enviando…' : 'Enviar instrucciones'}</button>
           </form>
@@ -310,5 +360,95 @@ export function PaginaPerfil() {
       <p><Link to="/cambiar-password">Cambiar contraseña</Link></p>
       <button style={{ ...boton, background: '#6b7280', marginTop: 8 }} onClick={salir} type="button">Cerrar sesión</button>
     </main>
+  );
+}
+
+const sidebar = { width: 240, background: '#0a0e1a', color: '#fff', display: 'flex', flexDirection: 'column', padding: '24px 16px', position: 'fixed', top: 0, bottom: 0, left: 0, zIndex: 10 };
+const sidebarLogo = { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32, padding: '0 8px' };
+const sidebarMenu = { flex: 1 };
+const sidebarItem = { display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 8, color: '#9ca3af', textDecoration: 'none', fontSize: 14, fontWeight: 500, cursor: 'pointer' };
+const sidebarItemActive = { ...sidebarItem, background: '#1f2937', color: '#fff' };
+const sidebarFooter = { borderTop: '1px solid #1f2937', paddingTop: 16, marginTop: 16 };
+const mainArea = { marginLeft: 240, flex: 1, background: '#f3f4f6', minHeight: '100vh', padding: 32 };
+const header = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 };
+const tituloPagina = { fontSize: 24, fontWeight: 700, color: '#111827' };
+const campana = { position: 'relative', cursor: 'pointer', padding: 8 };
+const badge = { position: 'absolute', top: 4, right: 4, width: 8, height: 8, background: '#ef4444', borderRadius: '50%' };
+const grid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 };
+const tarjeta = { background: '#fff', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.1)', borderBottom: '4px solid', display: 'flex', flexDirection: 'column', gap: 12 };
+const tarjetaTitulo = { fontSize: 16, fontWeight: 700, color: '#111827' };
+const tarjetaDesc = { fontSize: 13, color: '#6b7280' };
+const tarjetaClientes = { display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#374151', fontWeight: 500 };
+const tarjetaBoton = { marginTop: 'auto', padding: '10px 16px', borderRadius: 6, border: 0, background: '#0a0e1a', color: '#fff', fontWeight: 600, fontSize: 13, cursor: 'pointer', textAlign: 'center' };
+
+export function PaginaAdmin() {
+  const { cerrarSesion } = useAuth();
+  const navegar = useNavigate();
+
+  const servicios = [
+    { nombre: 'Adamo Pay', desc: 'Gestión de pagos', clientes: 3827, color: '#10b981' },
+    { nombre: 'Adamo Id', desc: 'Verificación de identidad', clientes: 9411, color: '#3b82f6' },
+    { nombre: 'Adamo Risk', desc: 'Reducción de riesgos', clientes: 793, color: '#8b5cf6' },
+    { nombre: 'Adamo Sign', desc: 'Firma de documentos', clientes: 2738, color: '#1e40af' },
+  ];
+
+  async function salir() {
+    await cerrarSesion();
+    navegar('/login', { replace: true });
+  }
+
+  return (
+    <div style={{ display: 'flex', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      <aside style={sidebar}>
+        <div style={sidebarLogo}>
+          <img src={logo} alt="Logo" width={32} height={32} />
+        </div>
+        <nav style={sidebarMenu}>
+          <a style={sidebarItem} href="#inicio">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Inicio
+          </a>
+          <a style={sidebarItemActive} href="#clientes">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Clientes
+          </a>
+        </nav>
+        <div style={sidebarFooter}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 0' }}>
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#374151', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>U</div>
+            <span style={{ fontSize: 13 }}>Mi perfil</span>
+          </div>
+          <button onClick={salir} style={{ ...sidebarItem, width: '100%', background: 'none', border: 'none', textAlign: 'left' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Cerrar sesión
+          </button>
+        </div>
+      </aside>
+      <main style={mainArea}>
+        <div style={header}>
+          <h1 style={tituloPagina}>Clientes</h1>
+          <div style={campana}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <div style={badge}></div>
+          </div>
+        </div>
+        <p style={{ fontSize: 14, color: '#6b7280', marginBottom: 20 }}>
+          Selecciona un servicio para ir a la gestión de clientes. <a href="#servicios" style={{ color: '#2563eb' }}>Ver todos los servicios</a>
+        </p>
+        <div style={grid}>
+          {servicios.map((s) => (
+            <div key={s.nombre} style={{ ...tarjeta, borderBottomColor: s.color }}>
+              <div style={tarjetaTitulo}>{s.nombre}</div>
+              <div style={tarjetaDesc}>{s.desc}</div>
+              <div style={tarjetaClientes}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                {s.clientes.toLocaleString()} clientes
+              </div>
+              <button style={tarjetaBoton}>Gestionar clientes</button>
+            </div>
+          ))}
+        </div>
+      </main>
+    </div>
   );
 }
