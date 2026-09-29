@@ -128,12 +128,13 @@ Sin SMTP configurado, el backend **simula** el envío (log en consola) y en desa
 ## Flujo completo
 
 ```text
-REGISTRO (Postman) → usuario creado (requiereCambioPassword=true)
-   → correo con contraseña temporal → LOGIN
-   → ¿temporal? SÍ → /cambiar-password → requiereCambioPassword=false → ACCESO NORMAL
+REGISTRO → usuario creado (requiereCambioPassword=true, contraseña válida 1 día)
+   → LOGIN → /cambiar-password → requiereCambioPassword=false → ACCESO NORMAL (/admin)
 
 OLVIDÉ MI CONTRASEÑA → correo con enlace+token (15 min, un solo uso)
    → nueva contraseña → confirmación por correo → LOGIN
+
+CONTRASEÑA EXPIRADA → login devuelve 403 PASSWORD_EXPIRED → debe renovar
 ```
 
 ## Endpoints

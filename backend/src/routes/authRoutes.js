@@ -13,10 +13,12 @@ const ctrl = require('../controllers/authController');
 
 const router = Router();
 
-router.post('/register', validar(registroSchema), asyncHandler(ctrl.registrar));
-router.post('/login', validar(loginSchema), asyncHandler(ctrl.iniciarSesion));
-router.post('/forgot-password', validar(forgotPasswordSchema), asyncHandler(ctrl.solicitarRecuperacion));
-router.post('/reset-password', validar(resetPasswordSchema), asyncHandler(ctrl.restablecerPassword));
+const limitadorAuth = require('../middlewares/rateLimit');
+
+router.post('/register', limitadorAuth, validar(registroSchema), asyncHandler(ctrl.registrar));
+router.post('/login', limitadorAuth, validar(loginSchema), asyncHandler(ctrl.iniciarSesion));
+router.post('/forgot-password', limitadorAuth, validar(forgotPasswordSchema), asyncHandler(ctrl.solicitarRecuperacion));
+router.post('/reset-password', limitadorAuth, validar(resetPasswordSchema), asyncHandler(ctrl.restablecerPassword));
 
 // Rutas autenticadas
 router.patch('/change-password', authMiddleware, validar(cambioPasswordSchema), asyncHandler(ctrl.cambiarPassword));

@@ -417,13 +417,13 @@ export function PaginaPerfil() {
   );
 }
 
-const sidebar = { width: 240, background: '#0a0e1a', color: '#fff', display: 'flex', flexDirection: 'column', padding: '24px 16px', position: 'fixed', top: 0, bottom: 0, left: 0, zIndex: 10 };
+const sidebar = { width: 240, background: '#0a0e1a', color: '#fff', display: 'flex', flexDirection: 'column', padding: '24px 16px', position: 'fixed', top: 0, bottom: 0, left: 0, zIndex: 10, overflowY: 'auto' };
 const sidebarLogo = { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32, padding: '0 8px' };
 const sidebarMenu = { flex: 1 };
 const sidebarItem = { display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 8, color: '#9ca3af', textDecoration: 'none', fontSize: 14, fontWeight: 500, cursor: 'pointer' };
 const sidebarItemActive = { ...sidebarItem, background: '#1f2937', color: '#fff' };
 const sidebarFooter = { borderTop: '1px solid #1f2937', paddingTop: 16, marginTop: 16 };
-const mainArea = { marginLeft: 240, flex: 1, background: '#f3f4f6', minHeight: '100vh', padding: 32 };
+const mainArea = { marginLeft: 240, flex: 1, background: '#f3f4f6', minHeight: '100vh', padding: 32, boxSizing: 'border-box' };
 const header = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 };
 const tituloPagina = { fontSize: 24, fontWeight: 700, color: '#111827' };
 const campana = { position: 'relative', cursor: 'pointer', padding: 8 };
@@ -438,6 +438,7 @@ const tarjetaBoton = { marginTop: 'auto', padding: '10px 16px', borderRadius: 6,
 export function PaginaAdmin() {
   const { cerrarSesion, requiereCambioPassword } = useAuth();
   const navegar = useNavigate();
+  const esMovil = useMediaQuery('(max-width: 768px)');
 
   const servicios = [
     { nombre: 'Adamo Pay', desc: 'Gestión de pagos', clientes: 3827, color: '#10b981' },
@@ -451,8 +452,40 @@ export function PaginaAdmin() {
     navegar('/login', { replace: true });
   }
 
+  if (esMovil) {
+    return (
+      <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', minHeight: '100vh', background: '#f3f4f6' }}>
+        <div style={{ background: '#0a0e1a', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <img src={logo} alt="Logo" width={28} height={28} />
+          <div style={{ display: 'flex', gap: 12 }}>
+            <Link style={{ color: '#fff', fontSize: 13, textDecoration: 'none' }} to="/cambiar-password">Contraseña</Link>
+            <button onClick={salir} style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: 13, cursor: 'pointer' }}>Salir</button>
+          </div>
+        </div>
+        <main style={{ padding: 20 }}>
+          {requiereCambioPassword && (
+            <div style={{ background: '#fef3c7', border: '1px solid #f59e0b', borderRadius: 8, padding: '12px 16px', marginBottom: 20 }}>
+              <span style={{ fontSize: 14, color: '#92400e' }}>Su contraseña expirará en 1 día. Por favor, cámbiela ahora.</span>
+            </div>
+          )}
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: '#111827', marginBottom: 20 }}>Clientes</h1>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
+            {servicios.map((s) => (
+              <div key={s.nombre} style={{ background: '#fff', borderRadius: 12, padding: 16, boxShadow: '0 1px 3px rgba(0,0,0,0.1)', borderBottom: `4px solid ${s.color}` }}>
+                <div style={{ fontSize: 16, fontWeight: 700, color: '#111827' }}>{s.nombre}</div>
+                <div style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>{s.desc}</div>
+                <div style={{ fontSize: 13, color: '#374151', fontWeight: 500, marginTop: 8 }}>{s.clientes.toLocaleString()} clientes</div>
+                <button style={{ marginTop: 12, padding: '10px 16px', borderRadius: 6, border: 0, background: '#0a0e1a', color: '#fff', fontWeight: 600, fontSize: 13, cursor: 'pointer', width: '100%' }}>Gestionar clientes</button>
+              </div>
+            ))}
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ display: 'flex', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div style={{ display: 'flex', fontFamily: 'system-ui, -apple-system, sans-serif', minHeight: '100vh' }}>
       <aside style={sidebar}>
         <div style={sidebarLogo}>
           <img src={logo} alt="Logo" width={32} height={32} />

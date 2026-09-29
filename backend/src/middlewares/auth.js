@@ -19,7 +19,7 @@ async function authMiddleware(req, res, next) {
     });
   }
   try {
-    const payload = jwt.verify(token, env.JWT_SECRET);
+    const payload = jwt.verify(token, env.JWT_SECRET, { algorithms: ['HS256'] });
     const usuario = await Usuario.findById(payload.sub);
     if (!usuario || !usuario.activo) {
       return res.status(401).json({
