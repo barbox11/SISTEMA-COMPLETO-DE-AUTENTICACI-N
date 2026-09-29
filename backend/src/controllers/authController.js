@@ -23,17 +23,16 @@ function hashToken(token) {
   return crypto.createHash('sha256').update(token).digest('hex');
 }
 
-// POST /api/auth/register — se usa desde Postman, genera password temporal
+// POST /api/auth/register — registra con contraseña del usuario
 async function registrar(req, res) {
-  const { nombre, apellido, correo, rol } = req.body;
+  const { nombre, apellido, correo, password, rol } = req.body;
 
   const existente = await Usuario.findOne({ correo });
   if (existente) {
     throw crearError('El correo ya se encuentra registrado.', 409, CODIGOS.USER_ALREADY_EXISTS);
   }
 
-  const passwordTemporal = generarPasswordTemporal(12);
-  const passwordHash = await bcrypt.hash(passwordTemporal, 12);
+  const passwordHash = await bcrypt.hash(password, 12);
 
   const usuario = await Usuario.create({
     nombre,
@@ -44,16 +43,9 @@ async function registrar(req, res) {
     requiereCambioPassword: true,
   });
 
-  // Enviar correo sin bloquear más de lo necesario; si falla, se informa pero el usuario ya existe
-  try {
-    await emailService.enviarBienvenida({ nombre: usuario.nombre, correo: usuario.correo, passwordTemporal });
-  } catch (error) {
-    throw crearError('El usuario fue creado, pero no fue posible enviar el correo con la contraseña temporal.', 502, CODIGOS.EMAIL_SEND_ERROR);
-  }
-
   return res.status(201).json({
     ok: true,
-    mensaje: 'Usuario registrado correctamente. Se envió la contraseña temporal al correo.',
+    mensaje: 'Usuario registrado correctamente.',
     datos: {
       id: usuario._id,
       nombre: usuario.nombre,
@@ -62,8 +54,6 @@ async function registrar(req, res) {
       rol: usuario.rol,
       requiereCambioPassword: true,
     },
-    // Solo en desarrollo se devuelve la temporal para facilitar pruebas sin SMTP
-    ...(env.esProduccion ? {} : { passwordTemporal }),
   });
 }
 
