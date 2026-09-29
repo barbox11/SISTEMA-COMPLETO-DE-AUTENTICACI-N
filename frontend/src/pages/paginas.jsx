@@ -35,6 +35,7 @@ const titulo = { fontSize: 20, fontWeight: 700, marginBottom: 4, color: '#111827
 const subtitulo = { fontSize: 13, color: '#6b7280', marginBottom: 20 };
 const tagline = { marginTop: 24, fontSize: 15, fontWeight: 500, textAlign: 'center', maxWidth: 320 };
 const legal = { marginTop: 16, fontSize: 10, color: '#ffffff', textAlign: 'center', maxWidth: 400, lineHeight: 1.5 };
+const botonVolver = { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 6, border: '1px solid #d1d5db', background: '#fff', color: '#374151', fontWeight: 500, fontSize: 13, cursor: 'pointer', textDecoration: 'none', marginTop: 16 };
 
 export function PaginaRegistro() {
   const navegar = useNavigate();
@@ -105,7 +106,10 @@ export function PaginaRegistro() {
             {mensaje ? <p style={{ color: '#059669', fontSize: 13 }}>{mensaje}</p> : null}
             <button style={boton} disabled={cargando}>{cargando ? 'Registrando…' : 'Crear cuenta'}</button>
           </form>
-          <p style={{ marginTop: 16 }}><Link style={link} to="/login">Volver al login</Link></p>
+          <Link style={botonVolver} to="/login">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Volver al login
+          </Link>
         </div>
       </div>
     </div>
@@ -167,7 +171,10 @@ export function PaginaLogin() {
             <p style={{ margin: '4px 0' }}><Link style={link} to="/recuperar-password">¿Olvidaste tu contraseña? Haz click aquí</Link></p>
             <button style={boton} disabled={cargando}>{cargando ? 'Ingresando…' : 'Iniciar sesión'}</button>
           </form>
-          <p style={{ marginTop: 16 }}><Link style={link} to="/registro">Crear cuenta</Link></p>
+          <Link style={botonVolver} to="/registro">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Crear cuenta
+          </Link>
         </div>
       </div>
     </div>
@@ -249,6 +256,10 @@ export function PaginaCambioPassword() {
             {ok ? <p style={{ color: '#059669', fontSize: 13 }}>{ok}</p> : null}
             <button style={boton} disabled={cargando}>{cargando ? 'Guardando…' : 'Guardar nueva contraseña'}</button>
           </form>
+          <Link style={botonVolver} to="/admin">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Hacer más tarde
+          </Link>
         </div>
       </div>
     </div>
@@ -290,7 +301,10 @@ export function PaginaRecuperar() {
             {mensaje ? <p style={{ color: '#059669', fontSize: 13 }}>{mensaje}</p> : null}
             <button style={boton} disabled={cargando}>{cargando ? 'Enviando…' : 'Enviar instrucciones'}</button>
           </form>
-          <p style={{ marginTop: 16 }}><Link style={link} to="/login">Volver al login</Link></p>
+          <Link style={botonVolver} to="/login">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Volver al login
+          </Link>
         </div>
       </div>
     </div>
@@ -327,7 +341,10 @@ export function PaginaRestablecer() {
         <button style={boton} disabled={cargando}>{cargando ? 'Guardando…' : 'Restablecer'}</button>
       </form>
       {mensaje ? <p>{mensaje}</p> : null}
-      <p><Link to="/login">Ir a iniciar sesión</Link></p>
+      <Link style={botonVolver} to="/login">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Ir a iniciar sesión
+      </Link>
     </main>
   );
 }
@@ -385,7 +402,16 @@ export function PaginaPerfil() {
         <button style={boton} type="submit">Actualizar datos</button>
       </form>
       {mensaje ? <p>{mensaje}</p> : null}
-      <p><Link to="/cambiar-password">Cambiar contraseña</Link></p>
+      <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
+        <Link style={botonVolver} to="/cambiar-password">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Cambiar contraseña
+        </Link>
+        <Link style={botonVolver} to="/admin">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Ir al panel
+        </Link>
+      </div>
       <button style={{ ...boton, background: '#6b7280', marginTop: 8 }} onClick={salir} type="button">Cerrar sesión</button>
     </main>
   );
@@ -470,9 +496,15 @@ export function PaginaAdmin() {
             <div style={badge}></div>
           </div>
         </div>
-        <p style={{ fontSize: 14, color: '#6b7280', marginBottom: 20 }}>
-          Selecciona un servicio para ir a la gestión de clientes. <a href="#servicios" style={{ color: '#2563eb' }}>Ver todos los servicios</a>
-        </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+          <p style={{ fontSize: 14, color: '#6b7280', margin: 0 }}>
+            Selecciona un servicio para ir a la gestión de clientes. <a href="#servicios" style={{ color: '#2563eb' }}>Ver todos los servicios</a>
+          </p>
+          <Link style={botonVolver} to="/perfil">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Mi perfil
+          </Link>
+        </div>
         <div style={grid}>
           {servicios.map((s) => (
             <div key={s.nombre} style={{ ...tarjeta, borderBottomColor: s.color }}>
