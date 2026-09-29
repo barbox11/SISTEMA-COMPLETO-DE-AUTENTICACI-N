@@ -1,7 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import logo from '../logo.png';
+
+function useMediaQuery(query) {
+  const [matches, setMatches] = useState(window.matchMedia(query).matches);
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const handler = (e) => setMatches(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, [query]);
+  return matches;
+}
 import {
   cambiarPassword as cambiarPasswordApi,
   solicitarRecuperacion as solicitarRecuperacionApi,
@@ -27,6 +38,7 @@ const legal = { marginTop: 16, fontSize: 10, color: '#ffffff', textAlign: 'cente
 
 export function PaginaRegistro() {
   const navegar = useNavigate();
+  const esMovil = useMediaQuery('(max-width: 768px)');
   const [form, setForm] = useState({ nombre: '', apellido: '', correo: '' });
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
@@ -48,24 +60,35 @@ export function PaginaRegistro() {
   }
 
   return (
-    <main style={caja}>
-      <h1>Crear cuenta</h1>
-      <form onSubmit={enviar}>
-        <input style={input} placeholder="Nombre" value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} required />
-        <input style={input} placeholder="Apellido" value={form.apellido} onChange={(e) => setForm({ ...form, apellido: e.target.value })} required />
-        <input style={input} type="email" placeholder="Correo" value={form.correo} onChange={(e) => setForm({ ...form, correo: e.target.value })} required />
-        {error ? <p style={{ color: '#dc2626' }}>{error}</p> : null}
-        {mensaje ? <p style={{ color: '#059669' }}>{mensaje}</p> : null}
-        <button style={boton} disabled={cargando}>{cargando ? 'Registrando…' : 'Crear cuenta'}</button>
-      </form>
-      <p><Link to="/login">Volver al login</Link></p>
-    </main>
+    <div style={{ ...layoutSplit, ...(esMovil ? { flexDirection: 'column' } : {}) }}>
+      <div style={{ ...panelIzq, ...(esMovil ? { padding: '30px 20px' } : {}) }}>
+        {logoImg}
+        <p style={tagline}>Tus procesos más eficientes, seguros y sin fricciones.</p>
+        <p style={legal}>Ser un propietario o socio nunca fue tan fácil. Descubre cómo nuestros servicios pueden ayudarte a alcanzar tus metas.</p>
+      </div>
+      <div style={panelDer}>
+        <div style={caja}>
+          <h1 style={titulo}>Crear cuenta</h1>
+          <p style={subtitulo}>Ingresa tus datos para registrarte:</p>
+          <form onSubmit={enviar}>
+            <input style={input} placeholder="Nombre" value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} required />
+            <input style={input} placeholder="Apellido" value={form.apellido} onChange={(e) => setForm({ ...form, apellido: e.target.value })} required />
+            <input style={input} type="email" placeholder="Correo electrónico" value={form.correo} onChange={(e) => setForm({ ...form, correo: e.target.value })} required />
+            {error ? <p style={{ color: '#dc2626', fontSize: 13 }}>{error}</p> : null}
+            {mensaje ? <p style={{ color: '#059669', fontSize: 13 }}>{mensaje}</p> : null}
+            <button style={boton} disabled={cargando}>{cargando ? 'Registrando…' : 'Crear cuenta'}</button>
+          </form>
+          <p style={{ marginTop: 16 }}><Link style={link} to="/login">Volver al login</Link></p>
+        </div>
+      </div>
+    </div>
   );
 }
 
 export function PaginaLogin() {
   const { iniciarSesion } = useAuth();
   const navegar = useNavigate();
+  const esMovil = useMediaQuery('(max-width: 768px)');
   const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
   const [verPassword, setVerPassword] = useState(false);
@@ -87,8 +110,8 @@ export function PaginaLogin() {
   }
 
   return (
-    <div style={layoutSplit}>
-      <div style={panelIzq}>
+    <div style={{ ...layoutSplit, ...(esMovil ? { flexDirection: 'column' } : {}) }}>
+      <div style={{ ...panelIzq, ...(esMovil ? { padding: '30px 20px' } : {}) }}>
         {logoImg}
         <p style={tagline}>Tus procesos más eficientes, seguros y sin fricciones.</p>
         <p style={legal}>Ser un propietario o socio nunca fue tan fácil. Descubre cómo nuestros servicios pueden ayudarte a alcanzar tus metas.</p>
@@ -162,6 +185,7 @@ export function PaginaCambioPassword() {
 }
 
 export function PaginaRecuperar() {
+  const esMovil = useMediaQuery('(max-width: 768px)');
   const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [cargando, setCargando] = useState(false);
@@ -180,8 +204,8 @@ export function PaginaRecuperar() {
   }
 
   return (
-    <div style={layoutSplit}>
-      <div style={panelIzq}>
+    <div style={{ ...layoutSplit, ...(esMovil ? { flexDirection: 'column' } : {}) }}>
+      <div style={{ ...panelIzq, ...(esMovil ? { padding: '30px 20px' } : {}) }}>
         {logoImg}
         <p style={tagline}>Tus procesos más eficientes, seguros y sin fricciones.</p>
         <p style={legal}>Ser un propietario o socio nunca fue tan fácil. Descubre cómo nuestros servicios pueden ayudarte a alcanzar tus metas.</p>
