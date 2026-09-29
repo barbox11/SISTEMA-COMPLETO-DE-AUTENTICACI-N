@@ -56,7 +56,7 @@ export function PaginaRegistro() {
     }
     setCargando(true);
     try {
-      await registrarApi(form.nombre.trim(), form.apellido.trim(), form.correo.trim());
+      await registrarApi(form.nombre.trim(), form.apellido.trim(), form.correo.trim(), form.password);
       setMensaje('Su contraseña temporal fue registrada correctamente. Por favor, cambie su contraseña temporal por una nueva.');
       setTimeout(() => navegar('/cambiar-password', { replace: true }), 2000);
     } catch (err) {
@@ -254,10 +254,6 @@ export function PaginaCambioPassword() {
 export function PaginaRecuperar() {
   const esMovil = useMediaQuery('(max-width: 768px)');
   const [correo, setCorreo] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmarPassword, setConfirmarPassword] = useState('');
-  const [verPassword, setVerPassword] = useState(false);
-  const [verConfirmar, setVerConfirmar] = useState(false);
   const [mensaje, setMensaje] = useState('');
   const [cargando, setCargando] = useState(false);
 
@@ -287,26 +283,6 @@ export function PaginaRecuperar() {
           <p style={subtitulo}>Ingresa tu correo para recibir instrucciones:</p>
           <form onSubmit={enviar}>
             <input style={input} type="email" placeholder="Correo electrónico" value={correo} onChange={(e) => setCorreo(e.target.value)} required />
-            <div style={{ position: 'relative' }}>
-              <input style={{ ...input, paddingRight: 40 }} type={verPassword ? 'text' : 'password'} placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
-              <button type="button" onClick={() => setVerPassword(!verPassword)} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#6b7280' }}>
-                {verPassword ? (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                ) : (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-                )}
-              </button>
-            </div>
-            <div style={{ position: 'relative' }}>
-              <input style={{ ...input, paddingRight: 40 }} type={verConfirmar ? 'text' : 'password'} placeholder="Confirmar contraseña" value={confirmarPassword} onChange={(e) => setConfirmarPassword(e.target.value)} required />
-              <button type="button" onClick={() => setVerConfirmar(!verConfirmar)} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#6b7280' }}>
-                {verConfirmar ? (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                ) : (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-                )}
-              </button>
-            </div>
             {mensaje ? <p style={{ color: '#059669', fontSize: 13 }}>{mensaje}</p> : null}
             <button style={boton} disabled={cargando}>{cargando ? 'Enviando…' : 'Enviar instrucciones'}</button>
           </form>
@@ -361,14 +337,21 @@ export function PaginaPerfil() {
   const [mensaje, setMensaje] = useState('');
 
   async function cargar() {
-    const res = await obtenerPerfilApi();
-    setPerfil(res.datos);
-    setNombre(res.datos.nombre || '');
-    setApellido(res.datos.apellido || '');
+    try {
+      const res = await obtenerPerfilApi();
+      setPerfil(res.datos);
+      setNombre(res.datos.nombre || '');
+      setApellido(res.datos.apellido || '');
+    } catch (err) {
+      setPerfil({});
+    }
   }
 
+  useEffect(() => {
+    if (!perfil) cargar();
+  }, [perfil]);
+
   if (!perfil) {
-    cargar();
     return <main style={caja}><p>Cargando perfil…</p></main>;
   }
 

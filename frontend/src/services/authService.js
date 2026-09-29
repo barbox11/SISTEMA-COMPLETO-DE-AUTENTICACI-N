@@ -6,8 +6,8 @@ export async function login(correo, password) {
   return data;
 }
 
-export async function registrar(nombre, apellido, correo) {
-  const { data } = await api.post('/auth/register', { nombre, apellido, correo });
+export async function registrar(nombre, apellido, correo, password) {
+  const { data } = await api.post('/auth/register', { nombre, apellido, correo, password });
   return data;
 }
 
