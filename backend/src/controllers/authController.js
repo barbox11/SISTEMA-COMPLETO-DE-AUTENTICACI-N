@@ -41,6 +41,7 @@ async function registrar(req, res) {
     rol: rol === 'admin' ? 'admin' : 'usuario',
     passwordHash,
     requiereCambioPassword: true,
+    passwordCreatedAt: new Date(),
   });
 
   return res.status(201).json({
@@ -81,6 +82,17 @@ async function iniciarSesion(req, res) {
     }
     await usuario.save();
     return res.status(401).json({ ok: false, mensaje: MENSAJE_CREDENCIALES, codigo: CODIGOS.AUTH_INVALID_CREDENTIALS });
+  }
+
+  if (usuario.requiereCambioPassword && usuario.passwordCreatedAt) {
+    const unDia = 24 * 60 * 60 * 1000;
+    if (Date.now() - usuario.passwordCreatedAt.getTime() > unDia) {
+      return res.status(403).json({
+        ok: false,
+        mensaje: 'Su contraseña temporal ha expirado. Debe renovarla.',
+        codigo: 'PASSWORD_EXPIRED',
+      });
+    }
   }
 
   usuario.intentosFallidos = 0;

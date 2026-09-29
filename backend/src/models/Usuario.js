@@ -17,6 +17,7 @@ const usuarioSchema = new mongoose.Schema(
     rol: { type: String, enum: ['usuario', 'admin'], default: 'usuario' },
     activo: { type: Boolean, default: true },
     requiereCambioPassword: { type: Boolean, default: true },
+    passwordCreatedAt: { type: Date, default: null },
     intentosFallidos: { type: Number, default: 0 },
     bloqueadoHasta: { type: Date, default: null },
     resetTokenHash: { type: String, default: null, select: false },

@@ -130,7 +130,11 @@ export function PaginaLogin() {
       const res = await iniciarSesion(correo.trim(), password);
       navegar(res.requiereCambioPassword ? '/cambiar-password' : '/admin', { replace: true });
     } catch (err) {
-      setError(err.response?.data?.mensaje || 'No fue posible iniciar sesión.');
+      if (err.response?.data?.codigo === 'PASSWORD_EXPIRED') {
+        setError('Su contraseña temporal ha expirado. Debe renovarla.');
+      } else {
+        setError(err.response?.data?.mensaje || 'No fue posible iniciar sesión.');
+      }
     } finally {
       setCargando(false);
     }
