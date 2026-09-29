@@ -6,6 +6,11 @@ export async function login(correo, password) {
   return data;
 }
 
+export async function registrar(nombre, apellido, correo) {
+  const { data } = await api.post('/auth/register', { nombre, apellido, correo });
+  return data;
+}
+
 export async function cambiarPassword(passwordActual, nuevaPassword, confirmarPassword) {
   const { data } = await api.patch('/auth/change-password', {
     passwordActual,

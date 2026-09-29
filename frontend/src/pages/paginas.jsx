@@ -6,6 +6,7 @@ import {
   solicitarRecuperacion as solicitarRecuperacionApi,
   restablecerPassword as restablecerPasswordApi,
   obtenerPerfil as obtenerPerfilApi,
+  registrar as registrarApi,
 } from '../services/authService.js';
 import { actualizarPerfil as actualizarPerfilApi } from '../services/userService.js';
 
@@ -13,6 +14,44 @@ import { actualizarPerfil as actualizarPerfilApi } from '../services/userService
 const caja = { maxWidth: 420, margin: '40px auto', padding: 24, border: '1px solid #e5e7eb', borderRadius: 12 };
 const input = { width: '100%', padding: 10, margin: '8px 0', borderRadius: 8, border: '1px solid #d1d5db' };
 const boton = { width: '100%', padding: 12, borderRadius: 8, border: 0, background: '#2563eb', color: '#fff', fontWeight: 'bold', cursor: 'pointer' };
+
+export function PaginaRegistro() {
+  const navegar = useNavigate();
+  const [form, setForm] = useState({ nombre: '', apellido: '', correo: '' });
+  const [mensaje, setMensaje] = useState('');
+  const [error, setError] = useState('');
+  const [cargando, setCargando] = useState(false);
+
+  async function enviar(e) {
+    e.preventDefault();
+    setError('');
+    setMensaje('');
+    setCargando(true);
+    try {
+      const res = await registrarApi(form.nombre.trim(), form.apellido.trim(), form.correo.trim());
+      setMensaje(`${res.mensaje} Contraseña temporal: ${res.passwordTemporal}`);
+    } catch (err) {
+      setError(err.response?.data?.mensaje || 'No fue posible registrar el usuario.');
+    } finally {
+      setCargando(false);
+    }
+  }
+
+  return (
+    <main style={caja}>
+      <h1>Crear cuenta</h1>
+      <form onSubmit={enviar}>
+        <input style={input} placeholder="Nombre" value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} required />
+        <input style={input} placeholder="Apellido" value={form.apellido} onChange={(e) => setForm({ ...form, apellido: e.target.value })} required />
+        <input style={input} type="email" placeholder="Correo" value={form.correo} onChange={(e) => setForm({ ...form, correo: e.target.value })} required />
+        {error ? <p style={{ color: '#dc2626' }}>{error}</p> : null}
+        {mensaje ? <p style={{ color: '#059669' }}>{mensaje}</p> : null}
+        <button style={boton} disabled={cargando}>{cargando ? 'Registrando…' : 'Crear cuenta'}</button>
+      </form>
+      <p><Link to="/login">Volver al login</Link></p>
+    </main>
+  );
+}
 
 export function PaginaLogin() {
   const { iniciarSesion } = useAuth();
@@ -45,6 +84,7 @@ export function PaginaLogin() {
         {error ? <p style={{ color: '#dc2626' }}>{error}</p> : null}
         <button style={boton} disabled={cargando}>{cargando ? 'Ingresando…' : 'Ingresar'}</button>
       </form>
+      <p><Link to="/registro">Crear cuenta</Link></p>
       <p><Link to="/recuperar-password">¿Olvidaste tu contraseña?</Link></p>
     </main>
   );

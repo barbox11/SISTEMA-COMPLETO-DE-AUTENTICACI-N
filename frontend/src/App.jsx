@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthContext.jsx';
 import { RutaProtegida, RutaCambioObligatorio, RutaPublica } from './routes/RutasProtegidas.jsx';
 import {
   PaginaLogin,
+  PaginaRegistro,
   PaginaCambioPassword,
   PaginaRecuperar,
   PaginaRestablecer,
@@ -16,6 +17,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<RutaPublica><PaginaLogin /></RutaPublica>} />
+          <Route path="/registro" element={<RutaPublica><PaginaRegistro /></RutaPublica>} />
           <Route path="/recuperar-password" element={<RutaPublica><PaginaRecuperar /></RutaPublica>} />
           <Route path="/restablecer-password" element={<PaginaRestablecer />} />
           <Route path="/cambiar-password" element={<RutaCambioObligatorio><PaginaCambioPassword /></RutaCambioObligatorio>} />
