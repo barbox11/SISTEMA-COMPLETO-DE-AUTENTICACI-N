@@ -21,7 +21,7 @@ api.interceptors.response.use(
     if (codigo === 'AUTH_TOKEN_EXPIRED' || codigo === 'AUTH_TOKEN_INVALID' || codigo === 'AUTH_NO_TOKEN') {
       localStorage.removeItem('token');
       localStorage.removeItem('usuario');
-      if (window.location.pathname !== '/login') window.location.href = '/login';
+      if (window.location.pathname !== '/iniciar-sesion') window.location.href = '/iniciar-sesion';
     }
     return Promise.reject(error);
   }
