@@ -14,7 +14,7 @@ import { actualizarPerfil as actualizarPerfilApi } from '../services/userService
 const logoImg = <img src={logo} alt="Logo" width={120} height={120} />;
 
 const layoutSplit = { display: 'flex', minHeight: '100vh', fontFamily: 'system-ui, -apple-system, sans-serif' };
-const panelIzq = { flex: 1, background: '#0a0e1a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', padding: '60px 40px', color: 'white' };
+const panelIzq = { flex: 1, background: '#0a0e1a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 40, color: 'white' };
 const panelDer = { flex: 1, background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 };
 const caja = { width: '100%', maxWidth: 380 };
 const input = { width: '100%', padding: '12px 14px', margin: '6px 0', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 14, boxSizing: 'border-box' };
@@ -22,8 +22,8 @@ const boton = { width: 'auto', padding: '10px 24px', borderRadius: 6, border: 0,
 const link = { color: '#2563eb', textDecoration: 'none', fontSize: 13 };
 const titulo = { fontSize: 20, fontWeight: 700, marginBottom: 4, color: '#111827' };
 const subtitulo = { fontSize: 13, color: '#6b7280', marginBottom: 20 };
-const tagline = { marginTop: 32, fontSize: 15, fontWeight: 500, textAlign: 'center', maxWidth: 320 };
-const legal = { fontSize: 10, color: '#ffffff', textAlign: 'center', maxWidth: 400, lineHeight: 1.5 };
+const tagline = { marginTop: 24, fontSize: 15, fontWeight: 500, textAlign: 'center', maxWidth: 320 };
+const legal = { marginTop: 16, fontSize: 10, color: '#ffffff', textAlign: 'center', maxWidth: 400, lineHeight: 1.5 };
 
 export function PaginaRegistro() {
   const navegar = useNavigate();
@@ -88,10 +88,8 @@ export function PaginaLogin() {
   return (
     <div style={layoutSplit}>
       <div style={panelIzq}>
-        <div style={{ textAlign: 'center' }}>
-          {logoImg}
-          <p style={tagline}>Tus procesos más eficientes, seguros y sin fricciones.</p>
-        </div>
+        {logoImg}
+        <p style={tagline}>Tus procesos más eficientes, seguros y sin fricciones.</p>
         <p style={legal}>Ser un propietario o socio nunca fue tan fácil. Descubre cómo nuestros servicios pueden ayudarte a alcanzar tus metas.</p>
       </div>
       <div style={panelDer}>
