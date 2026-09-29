@@ -68,6 +68,7 @@ export function PaginaLogin() {
   const navegar = useNavigate();
   const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
+  const [verPassword, setVerPassword] = useState(false);
   const [error, setError] = useState('');
   const [cargando, setCargando] = useState(false);
 
@@ -98,7 +99,16 @@ export function PaginaLogin() {
           <p style={subtitulo}>Ingresa tus credenciales a continuación para continuar:</p>
           <form onSubmit={enviar}>
             <input style={input} type="email" placeholder="Correo electrónico" value={correo} onChange={(e) => setCorreo(e.target.value)} required />
-            <input style={input} type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <div style={{ position: 'relative' }}>
+              <input style={{ ...input, paddingRight: 40 }} type={verPassword ? 'text' : 'password'} placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <button type="button" onClick={() => setVerPassword(!verPassword)} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#6b7280' }}>
+                {verPassword ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                )}
+              </button>
+            </div>
             {error ? <p style={{ color: '#dc2626', fontSize: 13 }}>{error}</p> : null}
             <p style={{ margin: '4px 0' }}><Link style={link} to="/recuperar-password">¿Olvidaste tu contraseña? Haz click aquí</Link></p>
             <button style={boton} disabled={cargando}>{cargando ? 'Ingresando…' : 'Iniciar sesión'}</button>
@@ -170,15 +180,25 @@ export function PaginaRecuperar() {
   }
 
   return (
-    <main style={caja}>
-      <h1>Recuperar contraseña</h1>
-      <form onSubmit={enviar}>
-        <input style={input} type="email" placeholder="Tu correo" value={correo} onChange={(e) => setCorreo(e.target.value)} required />
-        <button style={boton} disabled={cargando}>{cargando ? 'Enviando…' : 'Enviar instrucciones'}</button>
-      </form>
-      {mensaje ? <p>{mensaje}</p> : null}
-      <p><Link to="/login">Volver al login</Link></p>
-    </main>
+    <div style={layoutSplit}>
+      <div style={panelIzq}>
+        {logoImg}
+        <p style={tagline}>Tus procesos más eficientes, seguros y sin fricciones.</p>
+        <p style={legal}>Ser un propietario o socio nunca fue tan fácil. Descubre cómo nuestros servicios pueden ayudarte a alcanzar tus metas.</p>
+      </div>
+      <div style={panelDer}>
+        <div style={caja}>
+          <h1 style={titulo}>Recuperar contraseña</h1>
+          <p style={subtitulo}>Ingresa tu correo para recibir instrucciones:</p>
+          <form onSubmit={enviar}>
+            <input style={input} type="email" placeholder="Correo electrónico" value={correo} onChange={(e) => setCorreo(e.target.value)} required />
+            {mensaje ? <p style={{ color: '#059669', fontSize: 13 }}>{mensaje}</p> : null}
+            <button style={boton} disabled={cargando}>{cargando ? 'Enviando…' : 'Enviar instrucciones'}</button>
+          </form>
+          <p style={{ marginTop: 16 }}><Link style={link} to="/login">Volver al login</Link></p>
+        </div>
+      </div>
+    </div>
   );
 }
 
