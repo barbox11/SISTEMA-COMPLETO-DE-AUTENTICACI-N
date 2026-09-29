@@ -24,9 +24,9 @@ import { actualizarPerfil as actualizarPerfilApi } from '../services/userService
 
 const logoImg = <img src={logo} alt="Logo" width={120} height={120} />;
 
-const layoutSplit = { display: 'flex', minHeight: '100vh', fontFamily: 'system-ui, -apple-system, sans-serif' };
-const panelIzq = { flex: 1, background: '#0a0e1a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 40, color: 'white' };
-const panelDer = { flex: 1, background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 };
+const layoutSplit = { display: 'flex', minHeight: '100vh', width: '100%', fontFamily: 'system-ui, -apple-system, sans-serif', margin: 0, padding: 0, overflow: 'hidden' };
+const panelIzq = { flex: 1, background: '#0a0e1a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 40, color: 'white', minHeight: '100vh' };
+const panelDer = { flex: 1, background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40, minHeight: '100vh' };
 const caja = { width: '100%', maxWidth: 380 };
 const input = { width: '100%', padding: '12px 14px', margin: '6px 0', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 14, boxSizing: 'border-box' };
 const boton = { width: 'auto', padding: '10px 24px', borderRadius: 6, border: 0, background: '#0a0e1a', color: '#fff', fontWeight: 600, cursor: 'pointer', fontSize: 14, marginTop: 12 };
