@@ -56,8 +56,9 @@ export function PaginaRegistro() {
     }
     setCargando(true);
     try {
-      const res = await registrarApi(form.nombre.trim(), form.apellido.trim(), form.correo.trim());
-      setMensaje(`${res.mensaje} Contraseña temporal: ${res.passwordTemporal}`);
+      await registrarApi(form.nombre.trim(), form.apellido.trim(), form.correo.trim());
+      setMensaje('Su contraseña temporal fue registrada correctamente. Por favor, cambie su contraseña temporal por una nueva.');
+      setTimeout(() => navegar('/cambiar-password', { replace: true }), 2000);
     } catch (err) {
       setError(err.response?.data?.mensaje || 'No fue posible registrar el usuario.');
     } finally {
@@ -127,7 +128,7 @@ export function PaginaLogin() {
     setCargando(true);
     try {
       const res = await iniciarSesion(correo.trim(), password);
-      navegar(res.requiereCambioPassword ? '/cambiar-password' : '/perfil', { replace: true });
+      navegar(res.requiereCambioPassword ? '/cambiar-password' : '/admin', { replace: true });
     } catch (err) {
       setError(err.response?.data?.mensaje || 'No fue posible iniciar sesión.');
     } finally {
@@ -172,7 +173,11 @@ export function PaginaLogin() {
 export function PaginaCambioPassword() {
   const { marcarPasswordActualizada } = useAuth();
   const navegar = useNavigate();
+  const esMovil = useMediaQuery('(max-width: 768px)');
   const [form, setForm] = useState({ passwordActual: '', nuevaPassword: '', confirmarPassword: '' });
+  const [verPassword, setVerPassword] = useState(false);
+  const [verNueva, setVerNueva] = useState(false);
+  const [verConfirmar, setVerConfirmar] = useState(false);
   const [error, setError] = useState('');
   const [ok, setOk] = useState('');
   const [cargando, setCargando] = useState(false);
@@ -186,7 +191,7 @@ export function PaginaCambioPassword() {
       const res = await cambiarPasswordApi(form.passwordActual, form.nuevaPassword, form.confirmarPassword);
       setOk(res.mensaje);
       marcarPasswordActualizada();
-      setTimeout(() => navegar('/perfil', { replace: true }), 1200);
+      setTimeout(() => navegar('/admin', { replace: true }), 1500);
     } catch (err) {
       setError(err.response?.data?.mensaje || 'No fue posible cambiar la contraseña.');
     } finally {
@@ -195,18 +200,54 @@ export function PaginaCambioPassword() {
   }
 
   return (
-    <main style={caja}>
-      <h1>Cambiar contraseña</h1>
-      <p>Si tu contraseña es temporal, este paso es obligatorio.</p>
-      <form onSubmit={enviar}>
-        <input style={input} type="password" placeholder="Contraseña actual o temporal" value={form.passwordActual} onChange={(e) => setForm({ ...form, passwordActual: e.target.value })} required />
-        <input style={input} type="password" placeholder="Nueva contraseña" value={form.nuevaPassword} onChange={(e) => setForm({ ...form, nuevaPassword: e.target.value })} required />
-        <input style={input} type="password" placeholder="Confirmar nueva contraseña" value={form.confirmarPassword} onChange={(e) => setForm({ ...form, confirmarPassword: e.target.value })} required />
-        {error ? <p style={{ color: '#dc2626' }}>{error}</p> : null}
-        {ok ? <p style={{ color: '#059669' }}>{ok}</p> : null}
-        <button style={boton} disabled={cargando}>{cargando ? 'Guardando…' : 'Guardar nueva contraseña'}</button>
-      </form>
-    </main>
+    <div style={{ ...layoutSplit, ...(esMovil ? { flexDirection: 'column' } : {}) }}>
+      <div style={{ ...panelIzq, ...(esMovil ? { padding: '30px 20px' } : {}) }}>
+        {logoImg}
+        <p style={tagline}>Tus procesos más eficientes, seguros y sin fricciones.</p>
+        <p style={legal}>Ser un propietario o socio nunca fue tan fácil. Descubre cómo nuestros servicios pueden ayudarte a alcanzar tus metas.</p>
+      </div>
+      <div style={panelDer}>
+        <div style={caja}>
+          <h1 style={titulo}>Cambiar contraseña</h1>
+          <p style={subtitulo}>Si tu contraseña es temporal, este paso es obligatorio.</p>
+          <form onSubmit={enviar}>
+            <div style={{ position: 'relative' }}>
+              <input style={{ ...input, paddingRight: 40 }} type={verPassword ? 'text' : 'password'} placeholder="Contraseña actual o temporal" value={form.passwordActual} onChange={(e) => setForm({ ...form, passwordActual: e.target.value })} required />
+              <button type="button" onClick={() => setVerPassword(!verPassword)} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#6b7280' }}>
+                {verPassword ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                )}
+              </button>
+            </div>
+            <div style={{ position: 'relative' }}>
+              <input style={{ ...input, paddingRight: 40 }} type={verNueva ? 'text' : 'password'} placeholder="Nueva contraseña" value={form.nuevaPassword} onChange={(e) => setForm({ ...form, nuevaPassword: e.target.value })} required />
+              <button type="button" onClick={() => setVerNueva(!verNueva)} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#6b7280' }}>
+                {verNueva ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                )}
+              </button>
+            </div>
+            <div style={{ position: 'relative' }}>
+              <input style={{ ...input, paddingRight: 40 }} type={verConfirmar ? 'text' : 'password'} placeholder="Confirmar nueva contraseña" value={form.confirmarPassword} onChange={(e) => setForm({ ...form, confirmarPassword: e.target.value })} required />
+              <button type="button" onClick={() => setVerConfirmar(!verConfirmar)} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#6b7280' }}>
+                {verConfirmar ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                )}
+              </button>
+            </div>
+            {error ? <p style={{ color: '#dc2626', fontSize: 13 }}>{error}</p> : null}
+            {ok ? <p style={{ color: '#059669', fontSize: 13 }}>{ok}</p> : null}
+            <button style={boton} disabled={cargando}>{cargando ? 'Guardando…' : 'Guardar nueva contraseña'}</button>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -382,7 +423,7 @@ const tarjetaClientes = { display: 'flex', alignItems: 'center', gap: 8, fontSiz
 const tarjetaBoton = { marginTop: 'auto', padding: '10px 16px', borderRadius: 6, border: 0, background: '#0a0e1a', color: '#fff', fontWeight: 600, fontSize: 13, cursor: 'pointer', textAlign: 'center' };
 
 export function PaginaAdmin() {
-  const { cerrarSesion } = useAuth();
+  const { cerrarSesion, requiereCambioPassword } = useAuth();
   const navegar = useNavigate();
 
   const servicios = [
@@ -425,6 +466,12 @@ export function PaginaAdmin() {
         </div>
       </aside>
       <main style={mainArea}>
+        {requiereCambioPassword && (
+          <div style={{ background: '#fef3c7', border: '1px solid #f59e0b', borderRadius: 8, padding: '12px 16px', marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: 14, color: '#92400e' }}>Su contraseña expirará en 1 día. Por favor, cámbiela ahora.</span>
+            <button onClick={() => navegar('/cambiar-password')} style={{ padding: '8px 16px', borderRadius: 6, border: 0, background: '#0a0e1a', color: '#fff', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>Cambiar contraseña</button>
+          </div>
+        )}
         <div style={header}>
           <h1 style={tituloPagina}>Clientes</h1>
           <div style={campana}>
