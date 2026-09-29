@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Bienvenido</title></head>
+<body style="font-family:Arial,sans-serif;background:#f4f6fb;margin:0;padding:24px;">
+  <div style="max-width:600px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
+    <div style="background:#1f2937;color:#fff;padding:24px;">
+      <h1 style="margin:0;font-size:22px;">Bienvenido, {{nombre}}</h1>
+      <p style="margin:8px 0 0;opacity:.85;">Tu cuenta fue creada correctamente.</p>
+    </div>
+    <div style="padding:24px;color:#111827;">
+      <p>Hola <strong>{{nombre}}</strong>,</p>
+      <p>Se creó tu cuenta (<strong>{{correo}}</strong>) con una <strong>contraseña temporal</strong>. Por seguridad debes cambiarla en tu primer inicio de sesión.</p>
+      <div style="background:#f3f4f6;border:1px dashed #9ca3af;border-radius:8px;padding:16px;text-align:center;margin:16px 0;">
+        <div style="font-size:13px;color:#6b7280;">Tu contraseña temporal</div>
+        <div style="font-size:22px;font-weight:bold;letter-spacing:1px;">{{passwordTemporal}}</div>
+      </div>
+      <p>1. Inicia sesión con tu correo y la contraseña temporal.<br>2. Serás redirigido a <strong>/cambiar-password</strong>.<br>3. Crea tu contraseña definitiva.</p>
+      <a href="{{loginUrl}}" style="display:inline-block;background:#2563eb;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:bold;">Iniciar sesión</a>
+      <p style="font-size:12px;color:#6b7280;margin-top:16px;">Si no solicitaste esta cuenta, ignora este mensaje. © {{anio}}</p>
+    </div>
+  </div>
+</body>
+</html>

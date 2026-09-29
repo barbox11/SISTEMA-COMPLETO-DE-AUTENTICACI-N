@@ -1,0 +1,38 @@
+// Códigos de error consistentes en español
+const CODIGOS = {
+  VALIDATION_ERROR: 'VALIDATION_ERROR',
+  AUTH_INVALID_CREDENTIALS: 'AUTH_INVALID_CREDENTIALS',
+  AUTH_TOKEN_INVALID: 'AUTH_TOKEN_INVALID',
+  AUTH_TOKEN_EXPIRED: 'AUTH_TOKEN_EXPIRED',
+  AUTH_NO_TOKEN: 'AUTH_NO_TOKEN',
+  AUTH_PASSWORD_CHANGE_REQUIRED: 'AUTH_PASSWORD_CHANGE_REQUIRED',
+  AUTH_USER_INACTIVE: 'AUTH_USER_INACTIVE',
+  PASSWORD_INVALID: 'PASSWORD_INVALID',
+  PASSWORD_MISMATCH: 'PASSWORD_MISMATCH',
+  PASSWORD_SAME_AS_OLD: 'PASSWORD_SAME_AS_OLD',
+  USER_NOT_FOUND: 'USER_NOT_FOUND',
+  USER_ALREADY_EXISTS: 'USER_ALREADY_EXISTS',
+  USER_INACTIVE: 'USER_INACTIVE',
+  EMAIL_SEND_ERROR: 'EMAIL_SEND_ERROR',
+  RESET_TOKEN_INVALID: 'RESET_TOKEN_INVALID',
+  RESET_TOKEN_EXPIRED: 'RESET_TOKEN_EXPIRED',
+  RATE_LIMIT: 'RATE_LIMIT',
+  NOT_FOUND: 'NOT_FOUND',
+  FORBIDDEN: 'FORBIDDEN',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+};
+
+class ErrorApp extends Error {
+  constructor(mensaje, statusCode = 500, codigo = CODIGOS.INTERNAL_ERROR) {
+    super(mensaje);
+    this.statusCode = statusCode;
+    this.codigo = codigo;
+    this.ok = false;
+  }
+}
+
+function crearError(mensaje, statusCode, codigo) {
+  return new ErrorApp(mensaje, statusCode, codigo);
+}
+
+module.exports = { CODIGOS, ErrorApp, crearError };

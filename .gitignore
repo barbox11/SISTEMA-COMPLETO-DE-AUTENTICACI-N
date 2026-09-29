@@ -1,0 +1,43 @@
+# Dependencias (se publica package-lock para installs reproducibles)
+node_modules/
+node_modules_viejo/
+
+# Entornos
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Build
+dist/
+build/
+coverage/
+.nyc_output/
+
+# OS / Editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Postman local
+.postman/
+
+# Configuración local del entorno de IA (no subir)
+.agents/
+skills-lock.json
+
+# Docker
+mongo-auth-data/
+
+# Frontend
+frontend/dist/
+frontend/node_modules/
+
+# Backend
+backend/node_modules/
+backend/coverage/
