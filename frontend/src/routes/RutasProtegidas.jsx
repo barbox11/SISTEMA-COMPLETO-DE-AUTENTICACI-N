@@ -1,10 +1,10 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
-// Si no hay token → /login. Si debe cambiar password y no va a esa ruta → /cambiar-password.
+// Si no hay token → /iniciar-sesion. Si debe cambiar password y no va a esa ruta → /cambiar-password.
 export function RutaProtegida({ children }) {
   const { estaAutenticado, requiereCambioPassword } = useAuth();
-  if (!estaAutenticado) return <Navigate to="/login" replace />;
+  if (!estaAutenticado) return <Navigate to="/iniciar-sesion" replace />;
   if (requiereCambioPassword) return <Navigate to="/cambiar-password" replace />;
   return children;
 }
@@ -12,7 +12,7 @@ export function RutaProtegida({ children }) {
 // Solo para /cambiar-password: exige estar autenticado.
 export function RutaCambioObligatorio({ children }) {
   const { estaAutenticado } = useAuth();
-  if (!estaAutenticado) return <Navigate to="/login" replace />;
+  if (!estaAutenticado) return <Navigate to="/iniciar-sesion" replace />;
   return children;
 }
 

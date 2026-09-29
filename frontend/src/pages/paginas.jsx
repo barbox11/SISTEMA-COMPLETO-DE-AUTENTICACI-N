@@ -106,7 +106,7 @@ export function PaginaRegistro() {
             {mensaje ? <p style={{ color: '#059669', fontSize: 13 }}>{mensaje}</p> : null}
             <button style={boton} disabled={cargando}>{cargando ? 'Registrando…' : 'Crear cuenta'}</button>
           </form>
-          <Link style={botonVolver} to="/login">
+          <Link style={botonVolver} to="/iniciar-sesion">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             Volver al login
           </Link>
@@ -301,7 +301,7 @@ export function PaginaRecuperar() {
             {mensaje ? <p style={{ color: '#059669', fontSize: 13 }}>{mensaje}</p> : null}
             <button style={boton} disabled={cargando}>{cargando ? 'Enviando…' : 'Enviar instrucciones'}</button>
           </form>
-          <Link style={botonVolver} to="/login">
+          <Link style={botonVolver} to="/iniciar-sesion">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             Volver al login
           </Link>
@@ -341,7 +341,7 @@ export function PaginaRestablecer() {
         <button style={boton} disabled={cargando}>{cargando ? 'Guardando…' : 'Restablecer'}</button>
       </form>
       {mensaje ? <p>{mensaje}</p> : null}
-      <Link style={botonVolver} to="/login">
+      <Link style={botonVolver} to="/iniciar-sesion">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         Ir a iniciar sesión
       </Link>
@@ -389,7 +389,7 @@ export function PaginaPerfil() {
 
   async function salir() {
     await cerrarSesion();
-    navegar('/login', { replace: true });
+    navegar('/iniciar-sesion', { replace: true });
   }
 
   return (
@@ -449,7 +449,7 @@ export function PaginaAdmin() {
 
   async function salir() {
     await cerrarSesion();
-    navegar('/login', { replace: true });
+    navegar('/iniciar-sesion', { replace: true });
   }
 
   if (esMovil) {

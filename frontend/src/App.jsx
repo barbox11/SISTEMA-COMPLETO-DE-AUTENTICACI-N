@@ -16,15 +16,15 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<RutaPublica><PaginaLogin /></RutaPublica>} />
+          <Route path="/" element={<Navigate to="/iniciar-sesion" replace />} />
+          <Route path="/iniciar-sesion" element={<RutaPublica><PaginaLogin /></RutaPublica>} />
           <Route path="/registro" element={<RutaPublica><PaginaRegistro /></RutaPublica>} />
           <Route path="/recuperar-password" element={<RutaPublica><PaginaRecuperar /></RutaPublica>} />
           <Route path="/restablecer-password" element={<PaginaRestablecer />} />
           <Route path="/cambiar-password" element={<RutaCambioObligatorio><PaginaCambioPassword /></RutaCambioObligatorio>} />
           <Route path="/perfil" element={<RutaProtegida><PaginaPerfil /></RutaProtegida>} />
           <Route path="/admin" element={<RutaCambioObligatorio><PaginaAdmin /></RutaCambioObligatorio>} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<Navigate to="/iniciar-sesion" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
