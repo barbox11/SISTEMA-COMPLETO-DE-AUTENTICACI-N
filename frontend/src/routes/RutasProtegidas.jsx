@@ -9,7 +9,7 @@ export function RutaProtegida({ children }) {
   return children;
 }
 
-// Solo para /cambiar-password: exige estar autenticado, pero permite cambioRequerido.
+// Solo para /cambiar-password: exige estar autenticado.
 export function RutaCambioObligatorio({ children }) {
   const { estaAutenticado } = useAuth();
   if (!estaAutenticado) return <Navigate to="/login" replace />;
