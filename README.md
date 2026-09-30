@@ -62,6 +62,22 @@ copy .env.example .env
 docker compose up -d
 ```
 
+> **El paso `copy .env.example .env` es obligatorio.** El `docker-compose.yml` exige
+> `JWT_SECRET` (`${JWT_SECRET:?JWT_SECRET es obligatorio}`). Si no existe el archivo `.env`,
+> Docker **no arranca el backend** y muestra este error:
+>
+> ```
+> error: JWT_SECRET es obligatorio
+> ```
+>
+> No es un fallo del proyecto: es una medida de seguridad. Sin un secreto propio, cualquier
+> despliegue usaría una clave conocida y los tokens JWT serían falsificables. Edita `.env` y
+> cambia `JWT_SECRET` por una cadena aleatoria de mínimo 32 caracteres, por ejemplo:
+>
+> ```bash
+> node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+> ```
+
 Abre `http://localhost:5173` en tu navegador.
 
 ### Opción A — Desarrollo local (sin Docker)
@@ -177,11 +193,13 @@ Cubre: flujo temporal completo, bloqueo de rutas con temporal, credenciales inv�
 
 | Problema | Causa / solución |
 |---|---|
+| `error: JWT_SECRET es obligatorio` | Falta el archivo `.env` en la raíz → ejecuta `copy .env.example .env` y define `JWT_SECRET` |
 | `MongoServerSelectionError` | Docker apagado → inicia Docker Desktop y `docker compose up -d`; o usa Atlas en `.env` |
 | `AUTH_TOKEN_EXPIRED` | JWT vencido → inicia sesión de nuevo (`JWT_EXPIRES_IN=1h`) |
 | Correo no llega | Revisa SMTP en `.env`; sin SMTP el backend simula y devuelve `passwordTemporal`/`tokenDesarrollo` |
 | `403 AUTH_PASSWORD_CHANGE_REQUIRED` | Debes pasar por `/cambiar-password` primero |
 | CORS | `FRONTEND_URL` debe ser `http://localhost:5173` |
+| Acceso desde otro dispositivo en tu red | Cambia `FRONTEND_URL` en `.env` a `http://192.168.x.x:5173` y `VITE_API_URL` en `frontend/.env` |
 | Puerto ocupado | Cambia `PORT` en `.env` y `VITE_API_URL` en frontend |
 
 ## Licencia
