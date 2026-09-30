@@ -12,7 +12,7 @@ services:
     volumes:
       - mongo-auth-data:/data/db
     healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "-u", "admin", "-p", "admin123", "--authenticationDatabase", "admin", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongosh", "--quiet", "-u", "${MONGO_ROOT_USER:-admin}", "-p", "${MONGO_ROOT_PASSWORD:-admin123}", "--authenticationDatabase", "admin", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
