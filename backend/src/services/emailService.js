@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const env = require('../config/env');
@@ -44,7 +44,7 @@ async function enviarCorreo({ para, asunto, plantilla, variables }) {
     return { simulado: false, messageId: info.messageId };
   } catch (error) {
     console.error('Error al enviar correo:', error.message);
-    const err = new Error('No fue posible enviar el correo. Inténtalo más tarde.');
+    const err = new Error('No fue posible enviar el correo. IntÃ©ntalo mÃ¡s tarde.');
     err.statusCode = 502;
     err.codigo = 'EMAIL_SEND_ERROR';
     throw err;
@@ -54,13 +54,13 @@ async function enviarCorreo({ para, asunto, plantilla, variables }) {
 async function enviarBienvenida({ nombre, correo, passwordTemporal }) {
   return enviarCorreo({
     para: correo,
-    asunto: 'Bienvenido: tu cuenta fue creada, cambia tu contraseña temporal',
+    asunto: 'Bienvenido: tu cuenta fue creada, cambia tu contraseÃ±a temporal',
     plantilla: 'bienvenida.html',
     variables: {
       nombre,
       correo,
       passwordTemporal,
-      loginUrl: `${env.FRONTEND_URL}/login`,
+      loginUrl: `${env.FRONTEND_URL}/iniciar-sesion`,
       anio: new Date().getFullYear(),
     },
   });
@@ -69,7 +69,7 @@ async function enviarBienvenida({ nombre, correo, passwordTemporal }) {
 async function enviarRecuperacion({ nombre, correo, resetUrl, minutos }) {
   return enviarCorreo({
     para: correo,
-    asunto: 'Recupera tu contraseña',
+    asunto: 'Recupera tu contraseÃ±a',
     plantilla: 'recuperacion.html',
     variables: { nombre, resetUrl, minutos, anio: new Date().getFullYear() },
   });
@@ -78,10 +78,11 @@ async function enviarRecuperacion({ nombre, correo, resetUrl, minutos }) {
 async function enviarConfirmacionCambio({ nombre, correo }) {
   return enviarCorreo({
     para: correo,
-    asunto: 'Tu contraseña fue actualizada',
+    asunto: 'Tu contraseÃ±a fue actualizada',
     plantilla: 'cambio-confirmado.html',
-    variables: { nombre, loginUrl: `${env.FRONTEND_URL}/login`, anio: new Date().getFullYear() },
+    variables: { nombre, loginUrl: `${env.FRONTEND_URL}/iniciar-sesion`, anio: new Date().getFullYear() },
   });
 }
 
 module.exports = { enviarBienvenida, enviarRecuperacion, enviarConfirmacionCambio };
+
