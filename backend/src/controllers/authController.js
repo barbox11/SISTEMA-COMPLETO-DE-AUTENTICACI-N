@@ -24,8 +24,10 @@ function hashToken(token) {
 }
 
 // POST /api/auth/register — registra con contraseña temporal
+// El rol SIEMPRE es 'usuario': este endpoint es público, por lo que aceptar un
+// 'rol' desde el body permitiría que cualquiera se auto-asignara permisos de admin.
 async function registrar(req, res) {
-  const { nombre, apellido, correo, rol } = req.body;
+  const { nombre, apellido, correo } = req.body;
 
   const existente = await Usuario.findOne({ correo });
   if (existente) {
@@ -39,7 +41,7 @@ async function registrar(req, res) {
     nombre,
     apellido,
     correo,
-    rol: rol === 'admin' ? 'admin' : 'usuario',
+    rol: 'usuario',
     passwordHash,
     requiereCambioPassword: true,
     passwordCreatedAt: new Date(),

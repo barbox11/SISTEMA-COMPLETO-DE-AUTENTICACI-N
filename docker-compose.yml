@@ -30,7 +30,7 @@ services:
       MONGODB_URI: mongodb://${MONGO_ROOT_USER:-admin}:${MONGO_ROOT_PASSWORD:-admin123}@mongodb:27017/${MONGO_DB:-auth_db}?authSource=admin
       JWT_SECRET: ${JWT_SECRET:?JWT_SECRET es obligatorio}
       JWT_EXPIRES_IN: 1h
-      FRONTEND_URL: http://192.168.1.13:5173
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
       SMTP_HOST: ${SMTP_HOST:-}
       SMTP_PORT: ${SMTP_PORT:-587}
       SMTP_SECURE: ${SMTP_SECURE:-false}

@@ -1,6 +1,6 @@
 const { z } = require('zod');
 
-const REGEX_PASSWORD = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&*?]).{7,63}$/;
+const REGEX_PASSWORD = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&*?]).{8,64}$/;
 
 const mensajePassword =
   'La contraseña debe tener entre 8 y 64 caracteres e incluir mayúscula, minúscula, número y carácter especial (!@#$%&*?).';
@@ -24,7 +24,7 @@ const registroSchema = z.object({
   nombre: esquemaNombre('nombre'),
   apellido: esquemaNombre('apellido'),
   correo: esquemaCorreo,
-  rol: z.enum(['usuario', 'admin']).optional().default('usuario'),
+  // 'rol' se excluye a propósito: el registro es público y el rol se fija en el controlador.
 });
 
 const loginSchema = z.object({
