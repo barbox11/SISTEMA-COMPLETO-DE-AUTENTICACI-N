@@ -53,24 +53,35 @@ Todo lo visible al usuario (mensajes, errores, README) está en **español**.
 
 ## Instalación
 
+### Opción C — Solo Docker (recomendada)
+
 ```bash
-git clone <TU_REPO>
+git clone https://github.com/barbox11/SISTEMA-COMPLETO-DE-AUTENTICACI-N.git
+cd "SISTEMA COMPLETO DE AUTENTICACIÓN"
+copy .env.example .env
+docker compose up -d
+```
+
+Abre `http://localhost:5173` en tu navegador.
+
+### Opción A — Desarrollo local (sin Docker)
+
+```bash
+git clone https://github.com/barbox11/SISTEMA-COMPLETO-DE-AUTENTICACI-N.git
 cd "SISTEMA COMPLETO DE AUTENTICACIÓN"
 
-# 1. MongoDB con Docker (obligatorio según especificación)
-docker compose up -d
-docker ps --filter name=mongo-auth
+# 1. MongoDB con Docker
+docker compose up -d mongodb
 
 # 2. Backend
 cd backend
-cp .env.example .env   # en Windows: Copy-Item .env.example .env
-# Edita .env: MONGODB_URI, JWT_SECRET, SMTP_*
+copy .env.example .env
 npm install
 npm run dev            # http://localhost:3000/api/salud
 
 # 3. Frontend (otra terminal)
 cd ../frontend
-cp .env.example .env
+copy .env.example .env
 npm install
 npm run dev            # http://localhost:5173
 ```
