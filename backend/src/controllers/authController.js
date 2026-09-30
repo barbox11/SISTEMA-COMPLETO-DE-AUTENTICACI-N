@@ -23,16 +23,17 @@ function hashToken(token) {
   return crypto.createHash('sha256').update(token).digest('hex');
 }
 
-// POST /api/auth/register — registra con contraseña del usuario
+// POST /api/auth/register — registra con contraseña temporal
 async function registrar(req, res) {
-  const { nombre, apellido, correo, password, rol } = req.body;
+  const { nombre, apellido, correo, rol } = req.body;
 
   const existente = await Usuario.findOne({ correo });
   if (existente) {
     throw crearError('El correo ya se encuentra registrado.', 409, CODIGOS.USER_ALREADY_EXISTS);
   }
 
-  const passwordHash = await bcrypt.hash(password, 12);
+  const passwordTemporal = generarPasswordTemporal(12);
+  const passwordHash = await bcrypt.hash(passwordTemporal, 12);
 
   const usuario = await Usuario.create({
     nombre,
@@ -44,9 +45,15 @@ async function registrar(req, res) {
     passwordCreatedAt: new Date(),
   });
 
+  try {
+    await emailService.enviarBienvenida({ nombre: usuario.nombre, correo: usuario.correo, passwordTemporal });
+  } catch (error) {
+    // No bloquea el registro si el correo falla
+  }
+
   return res.status(201).json({
     ok: true,
-    mensaje: 'Usuario registrado correctamente.',
+    mensaje: 'Usuario registrado correctamente. Se envió la contraseña temporal al correo.',
     datos: {
       id: usuario._id,
       nombre: usuario.nombre,
@@ -55,6 +62,7 @@ async function registrar(req, res) {
       rol: usuario.rol,
       requiereCambioPassword: true,
     },
+    ...(env.esProduccion ? {} : { passwordTemporal }),
   });
 }
 

@@ -24,9 +24,6 @@ const registroSchema = z.object({
   nombre: esquemaNombre('nombre'),
   apellido: esquemaNombre('apellido'),
   correo: esquemaCorreo,
-  password: z
-    .string({ required_error: 'La contraseña es obligatoria.' })
-    .regex(REGEX_PASSWORD, mensajePassword),
   rol: z.enum(['usuario', 'admin']).optional().default('usuario'),
 });
 
