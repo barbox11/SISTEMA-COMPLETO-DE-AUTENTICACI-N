@@ -60,7 +60,7 @@ async function enviarBienvenida({ nombre, correo, passwordTemporal }) {
       nombre,
       correo,
       passwordTemporal,
-      loginUrl: `${env.FRONTEND_URL}/login`,
+      loginUrl: `${env.FRONTEND_URL}/iniciar-sesion`,
       anio: new Date().getFullYear(),
     },
   });
@@ -80,7 +80,7 @@ async function enviarConfirmacionCambio({ nombre, correo }) {
     para: correo,
     asunto: 'Tu contraseña fue actualizada',
     plantilla: 'cambio-confirmado.html',
-    variables: { nombre, loginUrl: `${env.FRONTEND_URL}/login`, anio: new Date().getFullYear() },
+    variables: { nombre, loginUrl: `${env.FRONTEND_URL}/iniciar-sesion`, anio: new Date().getFullYear() },
   });
 }
 
